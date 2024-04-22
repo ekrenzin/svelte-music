@@ -1,6 +1,10 @@
 {
-	"name": "svelte-music-player",
+	"name": "svelte-music",
 	"version": "0.0.1",
+	"description": "A simple music player built with Svelte, inspired by Svelte REPL",
+	"author": {
+		"name": "Ean Krenzin-Blank"
+	},
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build && npm run package",
