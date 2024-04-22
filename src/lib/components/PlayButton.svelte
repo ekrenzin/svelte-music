@@ -39,33 +39,33 @@
 
 {#if controls}
 	{#if $isPlaying === false}
-		<button class="play-button controls" on:click={playTrack}>
+		<button class="doodle-button play-button controls" on:click={playTrack}>
 			<PlayIcon />
 		</button>
 	{:else if $isPlaying === true && ($status === 'waiting' || $status === 'loading' || $status === 'can play some' || $status === 'can play all')}
-		<button class="play-button controls" on:click={pauseTrack}>
+		<button class="doodle-button play-button controls" on:click={pauseTrack}>
 			<LoadingIcon />
 		</button>
 	{:else if $isPlaying === true}
-		<button class="play-button controls" on:click={pauseTrack}>
+		<button class="doodle-button play-button controls" on:click={pauseTrack}>
 			<PauseIcon />
 		</button>
 	{/if}
 {:else if track}
 	{#if title !== $trackList[$index].title}
-		<button class="play-button track" on:click={addAndPlayTrack}>
+		<button class="doodle-button play-button track" on:click={addAndPlayTrack}>
 			<PlayIcon size={2.5} />
 		</button>
 	{:else if title === $trackList[$index].title && $isPlaying === true && ($status === 'loading' || $status === 'can play some' || $status === 'can play all' || $status === 'waiting')}
-		<button class="play-button track playing" on:click={pauseTrack}>
+		<button class="doodle-button play-button track playing" on:click={pauseTrack}>
 			<LoadingIcon size={2.5} />
 		</button>
 	{:else if title === $trackList[$index].title && $isPlaying === true}
-		<button class="play-button track playing" on:click={pauseTrack}>
+		<button class="doodle-button play-button track playing" on:click={pauseTrack}>
 			<PauseIcon size={2.5} />
 		</button>
 	{:else if title === $trackList[$index].title && $isPlaying === false}
-		<button class="play-button track playing" on:click={playTrack}>
+		<button class="doodle-button play-button track playing" on:click={playTrack}>
 			<PlayIcon size={2.5} />
 		</button>
 	{/if}
@@ -81,14 +81,15 @@
 		align-items: center;
 		justify-content: center;
 		border-radius: 4rem;
-		border: 1px solid #bbb;
-		background: #fcfcfc;
+		/* Box shadow upset and hard to look like a doodle */
+		background: none;
+		outline: none;
+		border: none;
 	}
 
 	.controls {
-		width: 4rem;
-		height: 4rem;
-		border: 2px solid #000;
+		width: 3rem;
+		height: 3rem;
 	}
 
 	.track {

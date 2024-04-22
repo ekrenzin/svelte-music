@@ -4,8 +4,11 @@
 	import { format } from './utilities.js';
 	import PlayButton from './PlayButton.svelte';
 	import VolumeControls from './VolumeControls.svelte';
+	import SkipIcon from './skip-icon.svelte';
+	import './controls.css';
 
 	import { onMount } from 'svelte';
+	import TrackList from './TrackList.svelte';
 
 	export let showVolume = true;
 	export let showProgress = true;
@@ -25,6 +28,15 @@
 	let artist = $trackList[$index].artist;
 	let src = $trackList[$index].file;
 
+	index.subscribe((value) => {
+		if (!value) return;
+		$isPlaying = false;
+		currentTime = 0;
+		pauseTrack();
+		$index = value;
+		loadTrack(value);
+	});
+
 	function whilePlaying() {
 		slider.value = audio.currentTime;
 		currentTime = slider.value;
@@ -32,10 +44,14 @@
 	}
 
 	function loadTrack($index) {
-		title = $trackList[$index].title;
-		artist = $trackList[$index].artist;
-		$audioPlayer.src = $trackList[$index].file;
-		$audioPlayer.load();
+		try {
+			title = $trackList[$index].title;
+			artist = $trackList[$index].artist;
+			$audioPlayer.src = $trackList[$index].file;
+			$audioPlayer.load();
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	function playTrack() {
@@ -114,71 +130,58 @@
 	{src}
 />
 
-<div class="box">
+<div class="box doodle-button">
 	{#if showTitle}
 		<div class="info">
-			<div class="block">
-				<h3>Title:</h3>
-				<p>{title}</p>
-			</div>
-			<div class="block">
-				<h3>Artist:</h3>
-				<p>{artist}</p>
-			</div>
+			<p><b>{title} by {artist}</b></p>
 		</div>
 	{/if}
-	{#if showTrackList}
-		<select>
-			{#each $trackList as track}
-				<option value={track.id}>{track.title} by {track.artist}</option>
-			{/each}
-		</select>
-	{/if}
+	<div class="controls">
+		<div class="buttons">
+			<button class="prev" on:click={previousTrack}><SkipIcon inverted={true} /></button>
 
-	<div class="buttons">
-		<button class="prev" on:click={previousTrack}>Prev</button>
+			<PlayButton controls />
 
-		<PlayButton controls />
+			<button class="next" on:click={nextTrack}><SkipIcon inverted={false} /></button>
+		</div>
 
-		<button class="next" on:click={nextTrack}>Next</button>
-	</div>
-	{#if showVolume}
+		<div class="progress">
+			<div class="progress-slider">
+				<Slider
+					bind:this={slider}
+					min={0}
+					bind:value={currentTime}
+					max={duration}
+					step={0.01}
+					precision={2}
+					formatter={(v) => format(v)}
+					on:input={movePosition}
+					on:change={updatePosition}
+				/>
+			</div>
+
+			<span class="duration">{format(currentTime)}/{format(duration)}</span>
+		</div>
+		<TrackList />
 		<VolumeControls bind:volume />
-	{/if}
-
-	<div class="progress">
-		<span class="time">{format(currentTime)}</span>
-
-		<div class="progress-slider">
-			<Slider
-				bind:this={slider}
-				min={0}
-				bind:value={currentTime}
-				max={duration}
-				step={0.01}
-				precision={2}
-				formatter={(v) => format(v)}
-				on:input={movePosition}
-				on:change={updatePosition}
-			/>
-		</div>
-
-		<span class="duration">{format(duration)}</span>
 	</div>
-
-	<!-- 	<div class='debugger'> -->
-
-	<!-- 		<p><strong>Index</strong></p><p>{$index}</p> -->
-	<!-- 		<p><strong>Volume</strong></p><p>{volume}</p> -->
-	<!-- 		<p><strong>Loading</strong></p><p>{$status}</p> -->
-	<!-- 		<p><strong>Playing</strong></p><p>{$isPlaying}</p> -->
-	<!-- 		<p><strong>Time</strong></p><p>{currentTime}</p> -->
-	<!-- 		<p><strong>Duration</strong></p><p>{duration}</p> -->
-
-	<!-- 	</div> -->
 </div>
 
 <style>
+	.box {
+		border-radius: 4rem;
+		padding: 1rem 3rem;
+		cursor: default;
+		font-family: sans-serif;
+	}
+
+	.controls {
+		display: grid;
+		grid-template-columns: auto 1fr auto auto;
+		align-items: center;
+		gap: 1.5rem;
+	}
+
 	.block {
 		display: flex;
 		flex-direction: row;
@@ -203,11 +206,17 @@
 	button {
 		margin: 0;
 		padding: 0;
-		width: 4rem;
-		height: 2rem;
+		width: 2rem;
+		height: 1.5rem;
 		border-radius: 4px;
 		border: 1px solid #bbb;
-		background: #fcfcfc;
+		background: none;
+		cursor: pointer;
+		transition: 0.25s;
+	}
+
+	button:hover {
+		transform: scale(1.1);
 	}
 
 	p {
@@ -220,74 +229,30 @@
 	span {
 		display: inline-grid;
 		margin: 0;
-		padding: 0.25rem 0.75rem;
-		background: #f3f3f3;
-		border: 1px solid #bbb;
 		border-radius: 6px;
 		place-items: center;
-		font-size: 14px;
-	}
-
-	.box {
-		margin: 0;
-		padding: 1rem;
-		padding-top: 1.5rem;
-		background: #eee;
-		grid-auto-flow: row;
-		row-gap: 1rem;
-		align-items: center;
-		border: 1px solid #bbb;
-		border-radius: 10px;
+		font-size: 1rem;
 	}
 
 	.info {
-		margin: 0;
+		margin: auto;
 		padding: 0;
 		width: 100%;
-		grid-template-columns: 1fr;
-		grid-template-rows: 2;
-		justify-items: start;
-		row-gap: 0.75rem;
-	}
-
-	.title,
-	.artist {
-		display: grid;
-		grid-auto-flow: column;
-		grid-template-columns: 4rem 1fr;
-		row-gap: 1rem;
-		margin: 0;
-		padding: 0;
-	}
-
-	.title {
-		grid-row: 1 / 2;
-	}
-
-	.artist {
-		grid-row: 2 / 3;
+		text-align: center;
 	}
 
 	.buttons {
-		grid-template-columns: 4rem 4rem 4rem;
+		grid-template-columns: 2rem 3rem 2rem;
 		place-items: center;
-		column-gap: 1rem;
+		column-gap: 0.5rem;
 		margin: auto;
 	}
-
-	.volume-slider {
-		margin: 0;
-		padding: 0;
-		width: 100%;
-	}
-
 	.progress {
-		grid-template-columns: 6rem 1fr 6rem;
-		place-items: center;
-	}
-
-	.time {
-		justify-self: start;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1rem;
 	}
 
 	.duration {
@@ -301,18 +266,6 @@
 	.prev,
 	.next {
 		border-radius: 2rem;
+		border: none;
 	}
-
-	/* 	.debugger {
-		padding: 1rem;
-		place-items: center;
-		column-gap: 1rem;
-		border: 1px solid #bbb;
-		border-radius: 8px;
-		background: #ddd;
-		grid-template-columns: 4rem 1fr 4rem 1fr;
-		justify-items: start;
-		align-items: center;
-		row-gap: 0.5rem;
-	} */
 </style>

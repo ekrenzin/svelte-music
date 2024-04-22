@@ -1,6 +1,6 @@
 <script>
 	// Set the size dynamically based on the component's need
-	export let size = `1.5rem`; // Update size to match the new SVG dimensions
+	export let size = `25`; // Update size to match the new SVG dimensions
 </script>
 
 <!-- Replace the old SVG with the new one, and bind size to the width and height attributes -->
@@ -26,7 +26,7 @@
 <style>
 	svg {
 		fill: none;
-		stroke: #2c3e50;
+		stroke: #000;
 	}
 	path {
 		fill: none;

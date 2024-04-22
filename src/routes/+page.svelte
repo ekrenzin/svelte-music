@@ -7,6 +7,7 @@
 	<h1 align="center">Simple Svelte Music Player</h1>
 	<Controls />
 
+	<h1 align="center">Adding Tracks</h1>
 	<Track
 		title="Gymnopédie no. 1"
 		artist="Erik Satie"

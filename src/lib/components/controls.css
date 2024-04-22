@@ -1,0 +1,12 @@
+
+.doodle-button {
+    box-shadow: 0.0rem 0.0rem 0px 0.0625rem #000;
+    transition: 0.25s;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+.doodle-button:hover {
+    box-shadow: 0.0625rem 0.0625rem 0px 0.125rem #000;
+}
