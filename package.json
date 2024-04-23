@@ -1,6 +1,6 @@
 {
 	"name": "svelte-music",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "A simple music player built with Svelte, inspired by Svelte REPL",
 	"author": {
 		"name": "Ean Krenzin-Blank"
@@ -32,6 +32,7 @@
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^3.0.0",
+		"@sveltejs/adapter-cloudflare": "^4.4.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/package": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
