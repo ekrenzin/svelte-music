@@ -1,6 +1,10 @@
 {
 	"name": "svelte-music",
-	"version": "0.0.3",
+	"version": "0.0.4",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ekrenzin/svelte-music"
+	},
 	"description": "A simple music player built with Svelte, inspired by Svelte REPL",
 	"author": {
 		"name": "Ean Krenzin-Blank"

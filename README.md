@@ -9,16 +9,22 @@ This library provides reusable Svelte components focused on creating and control
 - Track List Store: Manages the list of tracks.
 - Add Track Function: Allows adding tracks dynamically to the store.
 
-## Getting Started
+# Demo
 
-### Creating a Project
+https://12b78208.svelte-music-5gc.pages.dev
 
-If you are reading this, you likely have already created a Svelte project. If not, here's how to start:
+# Quickstart
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+```
+  import { Controls } from "svelte-music";
 
-# create a new project in my-app
-npm create svelte@latest my-app
+  onMount(() => {
+    trackList.set([
+      {
+        title: "The Way You Look Tonight",
+        artist: "Frank Sinatra",
+        file: "/music.mp3",
+      },
+    ]);
+  });
 ```

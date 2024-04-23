@@ -37,6 +37,14 @@
 		loadTrack(value);
 	});
 
+	trackList.subscribe((value) => {
+		if (!value) return;
+		if (value.length - 1 < $index) {
+			value.length;
+		}
+		loadTrack($index);
+	});
+
 	function whilePlaying() {
 		slider.value = audio.currentTime;
 		currentTime = slider.value;
